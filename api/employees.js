@@ -5,10 +5,6 @@ export default employeeRouter;
 import employees from "#db/employees";
 
 employeeRouter.get('/', (req, res) => {
-  res.status(200).send("Hello employees!");
-});
-
-employeeRouter.get('/', (req, res) => {
   res.status(200).send(employees);
 });
 
@@ -29,11 +25,13 @@ employeeRouter.get('/:id', (req, res) => {
   res.send(employee);
 });
 
-employeeRouter.post('/', (req, res) => {
+employeeRouter.post('/', (req, res, next) => {
   if(!req.body) return res.status(400).send("The request has no body!");
-  const {text} = req.body;
-  if(!text) return res.status(400).send("The request has no name!");
-  const newEmployee = {id: employees.length + 1, name:text};
+
+  const {name} = req.body;
+  if(!name) return res.status(400).send("The request has no name!");
+
+  const newEmployee = {id: employees.length + 1, name};
   employees.push(newEmployee);
   res.status(201).send(newEmployee);
 })
